@@ -160,6 +160,7 @@ def run(
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
+                    c = int(cls)
                     crop = save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True, save=False)
                     if names[c] != 'Person':
                         color = get_color_name(crop)
