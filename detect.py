@@ -31,8 +31,11 @@ import platform
 import sys
 from pathlib import Path
 
+from PIL import Image
+
 sys.path.append('..')
 from color_detection import get_color_name
+from ocr import getText
 # from translate_tts import read_position
 
 import torch
@@ -152,6 +155,7 @@ def run(
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
+            cv2.imwrite('img.jpg', imc)
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
                 # Rescale boxes from img_size to im0 size
@@ -213,10 +217,8 @@ def run(
                         vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer[i].write(im0)
 
-        if time.perf_counter() - prev >= 1:
             with open(f'runs/detect/file.txt', 'w') as f:
-                f.write('')
-            prev = time.perf_counter()
+                f.write(' ')
 
         # Print time (inference-only)
         LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
@@ -274,3 +276,4 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+    os.remove('runs/detect/file.txt')
