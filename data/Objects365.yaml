@@ -383,7 +383,7 @@ names:
 
 
 # Download script/URL (optional) ---------------------------------------------------------------------------------------
-download: |
+download:  |
   from tqdm import tqdm
 
   from utils.general import Path, check_requirements, download, np, xyxy2xywhn
